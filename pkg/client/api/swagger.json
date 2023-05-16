@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "identity-authen-api.proto",
+    "title": "recommend-api.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "IdentityAuthenService"
+      "name": "RecommendService"
     }
   ],
   "consumes": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/identity-authen-api/forgot_password": {
-      "post": {
-        "operationId": "IdentityAuthenService_ForgotPassword",
+    "/v1/recommend-api/{ctx.domain_id}/combined_data/approve": {
+      "put": {
+        "operationId": "CombinedDataApprove",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
+              "$ref": "#/definitions/recommend_apiCombinedDataResponse"
             }
           },
           "default": {
@@ -35,27 +35,56 @@
         },
         "parameters": [
           {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiForgotPasswordRequest"
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiCombinedData"
+                }
+              }
             }
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/forgot_password/update": {
+    "/v1/recommend-api/{ctx.domain_id}/combined_data/create": {
       "post": {
-        "operationId": "IdentityAuthenService_UpdateForgotPassword",
+        "operationId": "CombinedDataCreate",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
+              "$ref": "#/definitions/recommend_apiCombinedDataResponse"
             }
           },
           "default": {
@@ -67,27 +96,56 @@
         },
         "parameters": [
           {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiUpdatePasswordRequest"
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiCombinedData"
+                }
+              }
             }
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/get_mfa/{value}": {
+    "/v1/recommend-api/{ctx.domain_id}/combined_data/get_all": {
       "get": {
-        "operationId": "IdentityAuthenService_GetMfaType",
+        "operationId": "CombinedDataGetAll",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMfaResponse"
+              "$ref": "#/definitions/recommend_apiCombinedDataResponse"
             }
           },
           "default": {
@@ -98,6 +156,81 @@
           }
         },
         "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "request_payload",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/combined_data/get_by)tenant_id/{value}": {
+      "get": {
+        "operationId": "CombinedDataGetByTenantId",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiCombinedDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "value",
             "in": "path",
@@ -105,87 +238,32 @@
             "type": "string"
           },
           {
-            "name": "ctx.accessToken",
+            "name": "ctx.access_token",
             "in": "query",
             "required": false,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "IdentityAuthenService"
-        ]
-      }
-    },
-    "/v1/identity-authen-api/login": {
-      "post": {
-        "operationId": "IdentityAuthenService_Login",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiLoginResponse"
-            }
           },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiLoginRequest"
-            }
-          }
-        ],
-        "tags": [
-          "IdentityAuthenService"
-        ]
-      }
-    },
-    "/v1/identity-authen-api/logout": {
-      "get": {
-        "operationId": "IdentityAuthenService_Logout",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "ctx.accessToken",
+            "name": "ctx.part",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/prepare_login": {
+    "/v1/recommend-api/{ctx.domain_id}/key_public/receive/item": {
       "post": {
-        "operationId": "IdentityAuthenService_PrepareLogin",
+        "operationId": "KeyPublicItemReceive",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiPrepareLoginResponse"
+              "$ref": "#/definitions/recommend_apiMessageResponse"
             }
           },
           "default": {
@@ -197,71 +275,7 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiPrepareLoginRequest"
-            }
-          }
-        ],
-        "tags": [
-          "IdentityAuthenService"
-        ]
-      }
-    },
-    "/v1/identity-authen-api/registers": {
-      "post": {
-        "operationId": "IdentityAuthenService_RegisterUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiUserRegisterRequest"
-            }
-          }
-        ],
-        "tags": [
-          "IdentityAuthenService"
-        ]
-      }
-    },
-    "/v1/identity-authen-api/update_mfa/{userId}": {
-      "put": {
-        "operationId": "IdentityAuthenService_UpdateMfa",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "userId",
+            "name": "ctx.domain_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -274,12 +288,623 @@
               "type": "object",
               "properties": {
                 "ctx": {
-                  "$ref": "#/definitions/identity_authen_apiContext"
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
                 },
-                "mfas": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/identity_authen_apiMfa"
+                "data": {
+                  "$ref": "#/definitions/recommend_apiKeyPublicItem"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/key_public/receive/user": {
+      "post": {
+        "operationId": "KeyPublicUserReceive",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiKeyPublicUser"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/key_public/use/{value}": {
+      "get": {
+        "operationId": "KeyPublicUseGet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiKeyPublicUseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/key_public/user": {
+      "get": {
+        "operationId": "KeyPublicUserGet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiKeyPublicUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.domain_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.key_public",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_user",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.key_public_user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/phase3_two_part": {
+      "get": {
+        "operationId": "Phase3TwoPartGet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiPhase3TwoPartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.phase3_two_part_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.domain_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_user",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.processed_data_c1",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.processed_data_c2",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_item_original",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/phase3_two_part/create": {
+      "post": {
+        "operationId": "Phase3TwoPartCreate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiPhase3TwoPart"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/phase4_two_part": {
+      "get": {
+        "operationId": "Phase4TwoPartGet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiPhase4TwoPartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.phase4_two_part_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.domain_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_user",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.processed_data_r1",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.processed_data_r2",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.processed_data_r3",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_item_original",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item_original_1",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item_original_2",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/phase4_two_part/create": {
+      "post": {
+        "operationId": "Phase4TwoPartCreate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiPhase4TwoPart"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/process_data_sumilor/{value}": {
+      "post": {
+        "operationId": "ProcessDataSumilor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
                   }
                 }
               }
@@ -287,18 +912,18 @@
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/update_password/{userId}": {
-      "put": {
-        "operationId": "IdentityAuthenService_UpdatePassword",
+    "/v1/recommend-api/{ctx.domain_id}/process_data_survey/{value}": {
+      "post": {
+        "operationId": "ProcessDataSurvey",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
+              "$ref": "#/definitions/recommend_apiMessageResponse"
             }
           },
           "default": {
@@ -310,7 +935,13 @@
         },
         "parameters": [
           {
-            "name": "userId",
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "value",
             "in": "path",
             "required": true,
             "type": "string"
@@ -323,28 +954,40 @@
               "type": "object",
               "properties": {
                 "ctx": {
-                  "$ref": "#/definitions/identity_authen_apiContext"
-                },
-                "password": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
                 }
               }
             }
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/verify-forgot-password": {
-      "get": {
-        "operationId": "IdentityAuthenService_VerifyForgotPassword",
+    "/v1/recommend-api/{ctx.domain_id}/process_data_survey2/create": {
+      "post": {
+        "operationId": "ProcessDataSurveyCreate2",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
+              "$ref": "#/definitions/recommend_apiMessageResponse"
             }
           },
           "default": {
@@ -356,25 +999,56 @@
         },
         "parameters": [
           {
-            "name": "ctx.accessToken",
-            "in": "query",
-            "required": false,
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiProcessDataSurvey2"
+                }
+              }
+            }
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
         ]
       }
     },
-    "/v1/identity-authen-api/verify-user": {
-      "get": {
-        "operationId": "IdentityAuthenService_VerifyUser",
+    "/v1/recommend-api/{ctx.domain_id}/process_data_total/{value}": {
+      "post": {
+        "operationId": "ProcessDataTotal",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/identity_authen_apiMessageResponse"
+              "$ref": "#/definitions/recommend_apiMessageResponse"
             }
           },
           "default": {
@@ -386,190 +1060,392 @@
         },
         "parameters": [
           {
-            "name": "ctx.accessToken",
-            "in": "query",
-            "required": false,
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
             "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            }
           }
         ],
         "tags": [
-          "IdentityAuthenService"
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/recommend/cbf/{user_id}": {
+      "post": {
+        "operationId": "RecommendCbfGenarate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiRecommendCbfResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/recommend_apiRecommend"
+                  }
+                },
+                "position_user": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/recommend/cf/{user_id}": {
+      "post": {
+        "operationId": "RecommendCfGenarate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiRecommendCfResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/recommend_apiRecommend"
+                  }
+                },
+                "position_user": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/result_card/create": {
+      "post": {
+        "operationId": "ResultCardCreate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiMessageResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ctx": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "part": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "data": {
+                  "$ref": "#/definitions/recommend_apiResultCard"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "RecommendService"
+        ]
+      }
+    },
+    "/v1/recommend-api/{ctx.domain_id}/result_card/get_all": {
+      "get": {
+        "operationId": "ResultCardGetAll",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/recommend_apiResultCardResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ctx.domain_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ctx.access_token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ctx.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.result_card_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.domain_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.user_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_user",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.processed_data",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "data.position_item_original",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item_original_1",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.position_item_original_2",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "data.part",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "RecommendService"
         ]
       }
     }
   },
   "definitions": {
-    "identity_authen_apiContext": {
+    "ListRequestFilter": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "operator": {
           "type": "string"
         }
       }
     },
-    "identity_authen_apiForgotPasswordRequest": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiLoginRequest": {
-      "type": "object",
-      "properties": {
-        "ctx": {
-          "$ref": "#/definitions/identity_authen_apiContext"
-        },
-        "type": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "otp": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "requestId": {
-          "type": "string"
-        },
-        "typeMfa": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiLoginResponse": {
-      "type": "object",
-      "properties": {
-        "token": {
-          "type": "string"
-        },
-        "errorCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiMessageResponse": {
-      "type": "object",
-      "properties": {
-        "ok": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiMfa": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "enabled": {
-          "type": "boolean"
-        },
-        "secret": {
-          "type": "string"
-        },
-        "publicData": {
-          "type": "string"
-        },
-        "configured": {
-          "type": "boolean"
-        },
-        "url": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiMfaResponse": {
-      "type": "object",
-      "properties": {
-        "mfas": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/identity_authen_apiMfa"
-          }
-        }
-      }
-    },
-    "identity_authen_apiPrepareLoginRequest": {
-      "type": "object",
-      "properties": {
-        "ctx": {
-          "$ref": "#/definitions/identity_authen_apiContext"
-        }
-      }
-    },
-    "identity_authen_apiPrepareLoginResponse": {
-      "type": "object",
-      "properties": {
-        "token": {
-          "type": "string"
-        },
-        "errorCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "requestId": {
-          "type": "string"
-        },
-        "typeMfa": {
-          "type": "string"
-        },
-        "availableMfas": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "secret": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiUpdatePasswordRequest": {
-      "type": "object",
-      "properties": {
-        "ctx": {
-          "$ref": "#/definitions/identity_authen_apiContext"
-        },
-        "userId": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      }
-    },
-    "identity_authen_apiUserRegisterRequest": {
-      "type": "object",
-      "properties": {
-        "fullName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        }
-      }
+    "ListRequestOrderType": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC"
     },
     "protobufAny": {
       "type": "object",
@@ -579,6 +1455,489 @@
         }
       },
       "additionalProperties": {}
+    },
+    "recommend_apiCombinedData": {
+      "type": "object",
+      "properties": {
+        "tenant_id_1": {
+          "type": "string"
+        },
+        "tenant_id_2": {
+          "type": "string"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "combined_data_id": {
+          "type": "string"
+        },
+        "number_item_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "number_item_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "s_two_part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sk_two_part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nk_two_part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "s_one_part_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "s_one_part_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nk_one_part_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nk_one_part_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "number_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recommend_apiCombinedDataResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/recommend_apiCombinedData"
+        }
+      }
+    },
+    "recommend_apiContext": {
+      "type": "object",
+      "properties": {
+        "domain_id": {
+          "type": "string"
+        },
+        "access_token": {
+          "type": "string"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "recommend_apiKeyPublicItem": {
+      "type": "object",
+      "properties": {
+        "domain_id": {
+          "type": "string"
+        },
+        "key_public": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "key_public_item_id": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiKeyPublicUse": {
+      "type": "object",
+      "properties": {
+        "domain_id": {
+          "type": "string"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "key_public_use_id": {
+          "type": "string"
+        },
+        "key_public": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiKeyPublicUseResponse": {
+      "type": "object",
+      "properties": {
+        "ctx": {
+          "$ref": "#/definitions/recommend_apiContext"
+        },
+        "data": {
+          "$ref": "#/definitions/recommend_apiKeyPublicUse"
+        }
+      }
+    },
+    "recommend_apiKeyPublicUser": {
+      "type": "object",
+      "properties": {
+        "domain_id": {
+          "type": "string"
+        },
+        "key_public": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "key_public_user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiKeyPublicUserResponse": {
+      "type": "object",
+      "properties": {
+        "ctx": {
+          "$ref": "#/definitions/recommend_apiContext"
+        },
+        "data": {
+          "$ref": "#/definitions/recommend_apiKeyPublicUser"
+        }
+      }
+    },
+    "recommend_apiMessageResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "recommend_apiPhase3TwoPart": {
+      "type": "object",
+      "properties": {
+        "phase3_two_part_id": {
+          "type": "string"
+        },
+        "domain_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "processed_data_c1": {
+          "type": "string"
+        },
+        "processed_data_c2": {
+          "type": "string"
+        },
+        "position_item_original": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "recommend_apiPhase3TwoPartResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/recommend_apiPhase3TwoPart"
+        }
+      }
+    },
+    "recommend_apiPhase4TwoPart": {
+      "type": "object",
+      "properties": {
+        "phase4_two_part_id": {
+          "type": "string"
+        },
+        "domain_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "processed_data_r1": {
+          "type": "string"
+        },
+        "processed_data_r2": {
+          "type": "string"
+        },
+        "processed_data_r3": {
+          "type": "string"
+        },
+        "position_item_original": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "recommend_apiPhase4TwoPartResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/recommend_apiPhase4TwoPart"
+        }
+      }
+    },
+    "recommend_apiProcessDataSurvey2": {
+      "type": "object",
+      "properties": {
+        "process_data_survey_id": {
+          "type": "string"
+        },
+        "domain_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "processed_data": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "recommend_apiRecommend": {
+      "type": "object",
+      "properties": {
+        "process_data_c1": {
+          "type": "string"
+        },
+        "process_data_c2": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiRecommendCbfResponse": {
+      "type": "object",
+      "properties": {
+        "ctx": {
+          "$ref": "#/definitions/recommend_apiContext"
+        },
+        "data12": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/recommend_apiRecommendCbfResult12"
+          }
+        },
+        "data34": {
+          "$ref": "#/definitions/recommend_apiRecommendCbfResult34"
+        }
+      }
+    },
+    "recommend_apiRecommendCbfResult12": {
+      "type": "object",
+      "properties": {
+        "process_data_fk1": {
+          "type": "string"
+        },
+        "process_data_fk2": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiRecommendCbfResult34": {
+      "type": "object",
+      "properties": {
+        "process_data_fk3": {
+          "type": "string"
+        },
+        "process_data_fk4": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiRecommendCfResponse": {
+      "type": "object",
+      "properties": {
+        "ctx": {
+          "$ref": "#/definitions/recommend_apiContext"
+        },
+        "data910": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/recommend_apiRecommendCfResult910"
+          }
+        },
+        "data1112": {
+          "$ref": "#/definitions/recommend_apiRecommendCfResult1112"
+        }
+      }
+    },
+    "recommend_apiRecommendCfResult1112": {
+      "type": "object",
+      "properties": {
+        "process_data_fk11": {
+          "type": "string"
+        },
+        "process_data_fk12": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiRecommendCfResult910": {
+      "type": "object",
+      "properties": {
+        "process_data_fk9": {
+          "type": "string"
+        },
+        "process_data_fk10": {
+          "type": "string"
+        }
+      }
+    },
+    "recommend_apiResultCard": {
+      "type": "object",
+      "properties": {
+        "result_card_id": {
+          "type": "string"
+        },
+        "domain_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "position_user": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "processed_data": {
+          "type": "string"
+        },
+        "position_item_original": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_1": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "position_item_original_2": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "part": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "recommend_apiResultCardResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/recommend_apiResultCard"
+        }
+      }
     },
     "rpcStatus": {
       "type": "object",
