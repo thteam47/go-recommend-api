@@ -80,7 +80,7 @@ func (inst *RecommendService) KeyPublicUserReceive(ctx context.Context, req *pb.
 	keyPublicUser.DomainId = combinedData.CombinedDataId
 	keyPublicUserTmp, err := inst.componentsContainer.KeyPublicUserRepository().FindByOneByAttribute(userContext.SetDomainId(combinedData.CombinedDataId), map[string]interface{}{
 		"UserId":   keyPublicUser.UserId,
-		"TenantId": keyPublicUser.TenantId,
+		"TenantId": req.Ctx.DomainId,
 	})
 	if err != nil {
 		return nil, errutil.Wrap(err, "CombinedDataRepository.FindByTenantId")

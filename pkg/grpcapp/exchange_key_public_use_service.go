@@ -5,6 +5,7 @@ import (
 	"crypto/ecdsa"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/thteam47/common-libs/ecdsautil"
 	"github.com/thteam47/common-libs/x509util"
@@ -100,7 +101,7 @@ func (inst *RecommendService) KeyPublicUseGet(ctx context.Context, req *pb.Strin
 			return nil, errutil.Wrap(err, "KeyPublicUseRepository.Update")
 		}
 		if keyPublicUse == nil {
-
+			timeOneUserOnePartStart := time.Now().UnixMilli()
 			if positionItem <= 0 || positionItem > int(nkOnePart) {
 				return nil, status.Errorf(codes.FailedPrecondition, "Position item not found")
 			}
@@ -139,6 +140,9 @@ func (inst *RecommendService) KeyPublicUseGet(ctx context.Context, req *pb.Strin
 			if err != nil {
 				return nil, errutil.Wrap(err, "KeyPublicUserRepository.Create")
 			}
+			timeOneUserOnePartEnd := time.Now().UnixMilli()
+			dentaTimeOnePart := timeOneUserOnePartEnd - timeOneUserOnePartStart
+			fmt.Printf("Time gen key use public user one part: %d \n", dentaTimeOnePart)
 		}
 	} else if req.Ctx.Part == 2 {
 		keyPublicUse, err = inst.componentsContainer.KeyPublicUseRepository().FindByOneByAttribute(userContext.SetDomainId(combinedData.CombinedDataId), map[string]interface{}{
@@ -149,6 +153,7 @@ func (inst *RecommendService) KeyPublicUseGet(ctx context.Context, req *pb.Strin
 			return nil, errutil.Wrap(err, "KeyPublicUseRepository.Update")
 		}
 		if keyPublicUse == nil {
+			timeOneUserTwoPartStart := time.Now().UnixMilli()
 			if positionItem <= 0 || positionItem > int(combinedData.SkTwoPart) {
 				return nil, status.Errorf(codes.FailedPrecondition, "Position item not found")
 			}
@@ -218,6 +223,9 @@ func (inst *RecommendService) KeyPublicUseGet(ctx context.Context, req *pb.Strin
 					break
 				}
 			}
+			timeOneUserTwoPartEnd := time.Now().UnixMilli()
+			dentaTimeTwoPart := timeOneUserTwoPartEnd - timeOneUserTwoPartStart
+			fmt.Printf("Time gen key use public user two part: %d \n", dentaTimeTwoPart)
 		}
 	} else {
 		return nil, status.Errorf(codes.FailedPrecondition, "Part not found")

@@ -133,7 +133,7 @@ func (inst *RecommendService) CombinedDataApprove(ctx context.Context, req *pb.C
 		return nil, status.Errorf(codes.FailedPrecondition, "These 2 tenants have been combined")
 	}
 	if !entityutil.ServiceOrAdminRole(userContext) {
-		tenant, err := inst.componentsContainer.CustomerService().TenantFindById(userContext, combinedData.TenantId2)
+		tenant, err := inst.componentsContainer.CustomerService().TenantFindById(userContext, combinedDataItem.TenantId2)
 		if err != nil {
 			return nil, errutil.Wrap(err, "CustomerService.TenantFindById")
 		}

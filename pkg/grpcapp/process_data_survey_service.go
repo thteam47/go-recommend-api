@@ -5,7 +5,9 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"encoding/hex"
+	"fmt"
 	"math/big"
+	"time"
 
 	"github.com/thteam47/go-recommend-api/pkg/models"
 	"github.com/thteam47/go-recommend-api/util"
@@ -51,6 +53,7 @@ func (inst *RecommendService) ProcessDataSurvey(ctx context.Context, req *pb.Str
 		sPart = combinedData.STwoPart
 	}
 	max := 5 * int(combinedData.NumberUser) * 5
+	timeStart := time.Now().UnixMilli()
 	for j := 1; j <= int(sPart); j++ {
 		sumAij := &ecdsa.PublicKey{
 			Curve: curve,
@@ -164,6 +167,9 @@ func (inst *RecommendService) ProcessDataSurvey(ctx context.Context, req *pb.Str
 		}
 	}
 
+	timeEnd := time.Now().UnixMilli()
+	dentaTime := timeEnd - timeStart
+	fmt.Printf("Time logarit: %d \n", dentaTime)
 	return &pb.MessageResponse{}, nil
 }
 
